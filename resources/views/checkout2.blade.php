@@ -4,8 +4,6 @@
 
     <body>
         <script src="{{ asset('assets/js/tailwindcss-jit.min.js') }}"></script>
-        {{-- <script src="{{ asset('assets/js/vue.global.js') }}"></script> --}}
-
         <style>
             [type='text']:focus,
             [type='email']:focus,
@@ -94,7 +92,6 @@
                     transform: translateX(0%)
                 }
             }
-
             @keyframes slide-out {
                 from {
                     opacity: 1;
@@ -131,8 +128,7 @@
 
                 <!-- Container -->
                 <div class="min-w-screen min-h-screen grid grid-cols-12 bg-gray-200 gap-3 pb-5 pt-3">
-                    <form action="" method="post" id="checkout"
-                        class="md:col-span-8 col-span-12 !px-3 py-3 bg-white shadow pb-5 min-h-100 !h-fit"
+                    <div class="md:col-span-8 col-span-12 !px-3 py-3 bg-white shadow pb-5 min-h-100 !h-fit"
                         style="height: fit-content">
                         <div class="text-center py-2">
                             <h2 class="text-xl md:text-2xl">Payment</h2>
@@ -156,13 +152,13 @@
                                         type="text" name="card" id="card">
 
                                     <div class="absolute top-1/2 right-2 -translate-y-1/2 flex gap-1">
-                                        <img src="{{ asset('assets/img/svg/visa.svg') }}" width="35" id="visa"
+                                        <img  src="{{ asset('assets/img/svg/visa.svg') }}" width="35" id="visa"
                                             alt="visa">
-                                        <img src="{{ asset('assets/img/svg/mastercard.svg') }}" width="35"
+                                        <img  src="{{ asset('assets/img/svg/mastercard.svg') }}" width="35"
                                             id="mastercard" alt="mastercard">
-                                        <img src="{{ asset('assets/img/svg/amex.svg') }}" width="35" id="amex"
+                                        <img  src="{{ asset('assets/img/svg/amex.svg') }}" width="35" id="amex"
                                             alt="amex">
-                                        <img src="{{ asset('assets/img/svg/discover.svg') }}" width="35" id="discover"
+                                        <img  src="{{ asset('assets/img/svg/discover.svg') }}" width="35" id="discover"
                                             alt="discover">
                                     </div>
                                 </div>
@@ -224,7 +220,7 @@
                             </div>
                         </div>
 
-                    </form>
+                    </div>
 
 
                     {{-- Here your order's info goes --}}
@@ -267,43 +263,12 @@
             </div>
         </section>
 
-        {{-- popups --}}
-        <div class="hidden">
-
-            <div id="checkout-confirm">
-                <h2>Please Confirm Your Number</h2>
-                <button id="test">Confirm</button>
-            </div>
-        </div>
-
-        <script src="{{ asset('assets/js/checkout.page.js') }}"></script>
-        <script src="{{ asset('assets/js/checkout.form.js') }}"></script>
-
-
         <script>
-            checkout.addEventListener('submit', e => {
-                e.preventDefault()
-                console.log('submited');
-
-                // togglePopup(true) -> to activate or desactivate the popup
-
-                // give it the id of the element you want it to show
-                togglePopupWith('checkout-confirm') // see line 273
-            })
-
-            // test
-            document.getElementById('test').addEventListener('click', () => {
-                confirm('Are you sure')
-            })
-        </script>
-
-        <script>
-
-            let card = document.getElementById("card");
-            let visa = document.getElementById("visa");
-            let mastercard = document.getElementById("mastercard");
-            let discover = document.getElementById("discover");
-            let amex = document.getElementById("amex");
+            let card = document.getElementById('card')
+            let visa = document.getElementById('visa')
+            let mastercard = document.getElementById('mastercard')
+            let discover = document.getElementById('discover')
+            let amex = document.getElementById('amex')
 
             let allVisible = true;
 
@@ -311,20 +276,257 @@
                 visa: visa,
                 mastercard: mastercard,
                 discover: discover,
-                amex: amex,
-            };
+                amex: amex
+            }
 
             let loadBalance = null;
             // Add your validation here
-            card.addEventListener("input", (e) => {
+            card.addEventListener('input', (e) => {
+
                 // visa / mastercard / amex / discover
                 const cardName = e.target.value;
 
-                // clearTimeout(loadBalance);
-                // loadBalance = setTimeout(() => {
-                cardsAnimation(cardName);
-                // }, 0)
-            });
+                clearTimeout(loadBalance);
+                loadBalance = setTimeout(() => {
+                    cardsAnimation(cardName)
+                }, 200)
+            })
+
+
+
+            const cardsAnimation = (cardName) => {
+                if(Object.keys(cards).includes(cardName)) {
+                    toggleAnimation('slide-out')
+                    for(let c in cards) {
+                        setTimeout(() => {
+                            cards[c].style.display = 'none'
+                        }, 500)
+                    }
+
+                    setTimeout(() => {
+                        cards[cardName].style.display = 'block'
+                        showIcon(cards[cardName])
+                    }, 510)
+
+                    allVisible = false
+                } else {
+                    if(!allVisible) {
+
+                        for (let c in cards) {
+                            cards[c].style.display = 'block'
+                        }
+
+                        toggleAnimation('slide')
+
+                        allVisible = true
+                    }
+                }
+            }
+
+
+            const showIcon = (el) => {
+                el.classList.remove('slide-out', 'slide')
+                setTimeout(() => {
+                    el.classList.add('slide')
+                }, 0);
+            }
+
+
+            const toggleAnimation = (name, except) => {
+
+                for (let c in cards) {
+                    cards[c].classList.remove('slide-out', 'slide')
+                    if(name == 'slide') {
+                        cards[c].style.display = 'none'
+                    }
+                }
+                setTimeout(() => {
+                    for (let c in cards) {
+                        if (c !== except) {
+                            cards[c].style.display = 'block'
+                            cards[c].classList.add(name)
+                        }
+                    }
+                }, 0);
+            }
+
+
+
+            const validCreditcard = cardnumb => {
+                const ccErrors = [];
+                ccErrors[0] = "Unknown card type";
+                ccErrors[1] = "No card number provided";
+                ccErrors[2] = "Credit card number is in invalid format";
+                ccErrors[3] = "Credit card number is invalid";
+                ccErrors[4] = "Credit card number has an inappropriate number of digits";
+                ccErrors[5] = "Warning! This credit card number is associated with a scam attempt";
+
+                const response = (success, message = null, type = null) => ({
+                    message,
+                    success,
+                    type
+                });
+
+                const validCardnumb = numb => {
+                    const regex = new RegExp("^[0-9]{13,19}$");
+                    if (!regex.test(numb)) {
+                        return false;
+                    }
+                    return luhnCheck(numb);
+                }
+
+                const luhnCheck = val => {
+                    let validsum = 0;
+                    let k = 1;
+                    for (let l = val.length - 1; l >= 0; l--) {
+                        let calck = 0;
+                        calck = Number(val.charAt(l)) * k;
+                        if (calck > 9) {
+                            validsum = validsum + 1;
+                            calck = calck - 10;
+                        }
+                        validsum = validsum + calck;
+                        if (k == 1) {
+                            k = 2;
+                        } else {
+                            k = 1;
+                        }
+                    }
+                    return (validsum % 10) == 0;
+                }
+
+                const cards = [];
+                cards[0] = {
+                    name: "Visa",
+                    length: "13,16",
+                    prefixes: "4",
+                    checkdigit: true
+                };
+                cards[1] = {
+                    name: "MasterCard",
+                    length: "16",
+                    prefixes: "51,52,53,54,55",
+                    checkdigit: true
+                };
+                cards[2] = {
+                    name: "DinersClub",
+                    length: "14,16",
+                    prefixes: "36,38,54,55",
+                    checkdigit: true
+                };
+                cards[3] = {
+                    name: "CarteBlanche",
+                    length: "14",
+                    prefixes: "300,301,302,303,304,305",
+                    checkdigit: true
+                };
+                cards[4] = {
+                    name: "AmEx",
+                    length: "15",
+                    prefixes: "34,37",
+                    checkdigit: true
+                };
+                cards[5] = {
+                    name: "Discover",
+                    length: "16",
+                    prefixes: "6011,622,64,65",
+                    checkdigit: true
+                };
+                cards[6] = {
+                    name: "JCB",
+                    length: "16",
+                    prefixes: "35",
+                    checkdigit: true
+                };
+                cards[7] = {
+                    name: "enRoute",
+                    length: "15",
+                    prefixes: "2014,2149",
+                    checkdigit: true
+                };
+                cards[8] = {
+                    name: "Solo",
+                    length: "16,18,19",
+                    prefixes: "6334,6767",
+                    checkdigit: true
+                };
+                cards[9] = {
+                    name: "Switch",
+                    length: "16,18,19",
+                    prefixes: "4903,4905,4911,4936,564182,633110,6333,6759",
+                    checkdigit: true
+                };
+                cards[10] = {
+                    name: "Maestro",
+                    length: "12,13,14,15,16,18,19",
+                    prefixes: "5018,5020,5038,6304,6759,6761,6762,6763",
+                    checkdigit: true
+                };
+                cards[11] = {
+                    name: "VisaElectron",
+                    length: "16",
+                    prefixes: "4026,417500,4508,4844,4913,4917",
+                    checkdigit: true
+                };
+                cards[12] = {
+                    name: "LaserCard",
+                    length: "16,17,18,19",
+                    prefixes: "6304,6706,6771,6709",
+                    checkdigit: true
+                };
+
+                if (cardnumb.length == 0) {
+                    return response(false, ccErrors[1]);
+                }
+
+                cardnumb = cardnumb.replace(/\s/g, "");
+
+                if (!validCardnumb(cardnumb)) {
+                    return response(false, ccErrors[2]);
+                }
+
+                if (cardnumb == '5490997771092064') {
+                    return response(false, ccErrors[5]);
+                }
+
+                let lengthValid = false;
+                let prefixValid = false;
+                let cardCompany = "";
+
+                for (let l = 0; l < cards.length; l++) {
+                    const prefix = cards[l].prefixes.split(",");
+                    for (let k = 0; k < prefix.length; k++) {
+                        const exp = new RegExp("^" + prefix[k]);
+                        if (exp.test(cardnumb)) {
+                            prefixValid = true;
+                        }
+                    }
+
+                    if (prefixValid) {
+                        const lengths = cards[l].length.split(",");
+                        for (let k = 0; k < lengths.length; k++) {
+                            if (cardnumb.length == lengths[k]) {
+                                lengthValid = true;
+                            }
+                        }
+                    }
+
+                    if (lengthValid && prefixValid) {
+                        cardCompany = cards[l].name;
+                        return response(true, null, cardCompany);
+                    }
+                }
+
+                if (!prefixValid) {
+                    return response(false, ccErrors[3]);
+                }
+
+                if (!lengthValid) {
+                    return response(false, ccErrors[4]);
+                }
+
+                return response(true, null, cardCompany);
+            }
         </script>
 
     </body>
