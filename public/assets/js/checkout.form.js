@@ -1,4 +1,38 @@
+const expirationYear = document.getElementById('year');
+const expirationMonth = document.getElementById('month');
+const cardCVC = document.getElementById('cvc');
 
+let oldMonth = 1;
+expirationMonth.addEventListener('input', e => {
+    let value = e.target.value
+
+    if (value.length >= 2) {
+        expirationYear.focus()
+    }
+
+    if (parseInt(value) <= 0 || parseInt(value) >= 13) {
+        e.target.value = oldMonth;
+        return false;
+    }
+
+    oldMonth = value;
+})
+
+let oldYear = 23;
+expirationYear.addEventListener('input', e => {
+    let value = e.target.value
+
+    if (value.length >= 2) {
+        cardCVC.focus()
+    }
+
+    if (parseInt(value) <= 0 || parseInt(value) >= 99) {
+        e.target.value = oldYear;
+        return false;
+    }
+
+    oldYear = value;
+})
 
 const cardsAnimation = (cardName) => {
     if (Object.keys(cards).includes(cardName)) {

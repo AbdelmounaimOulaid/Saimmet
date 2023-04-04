@@ -108,6 +108,12 @@
             }
         </style>
 
+        <!-- popup -->
+        <div id="popup" class="fixed top-0 left-0 w-full hidden h-full bg-black/50 z-50 items-center justify-center">
+            <div id="popup-content" class="min-w-[400px] w-[90%] p-5 max-w-[450px] h-[400px] bg-white">
+            </div>
+        </div>
+
         <!-- Main content -->
         <section class="slice py-6 pt-lg-4 pb-lg-8 bg-gray-200">
 
@@ -181,7 +187,7 @@
 
                                         <span class="block col-span-1"> / </span>
 
-                                        <input placeholder="YYYY" min="2023" maxlength="4"
+                                        <input placeholder="YY" min="23" maxlength="4"
                                             class=" col-span-5 py-2 h-full focus:border-transparent border-transparent appearance-none"
                                             type="number" name="year" id="year">
                                     </div>
@@ -194,7 +200,7 @@
 
                                         <input placeholder="CVC"
                                             class="w-full py-2 h-full focus:border-transparent border-transparent pr-3"
-                                            type="text" name="card" id="card">
+                                            type="text" name="cvc" id="cvc">
 
                                         <div class="absolute top-1/2 right-2 -translate-y-1/2 flex gap-1">
                                             <img src="{{ asset('assets/img/svg/cvv.svg') }}" width="35" alt="cvv">
@@ -268,11 +274,58 @@
         </section>
 
         {{-- popups --}}
-        <div class="hidden">
+        <div class="hidden" id="popup-elements">
 
-            <div id="checkout-confirm">
-                <h2>Please Confirm Your Number</h2>
-                <button id="test">Confirm</button>
+            <div id="checkout-confirm" class="flex flex-col h-full justify-center">
+                <h2 class="text-center text-xl font-bold">
+                    How would you like to approve this payment ?
+                </h2>
+
+                <div class="mt-5 w-full">
+                    <button id="approve-by-sms-btn" class="block w-full text-center bg-yellow-500 text-white py-2 px-6">
+                        Get an SMS code
+                    </button>
+                    <button id="approve-by-call-btn" class="block w-full text-center bg-white border border-solid !border-yellow-500 mt-3 text-yellow-500 py-2 px-6">
+                        Receive a call
+                    </button>
+                </div>
+            </div>
+
+            <div id="approve-by-sms" class="flex flex-col h-full justify-center">
+                <h2 class="text-center text-xl font-bold">
+                    Confirm by SMS
+                </h2>
+                <div class="text-center mt-3">
+                    <p>Enter the 6-digit code we just sent to your phone number ending with </p>
+                    <div class="flex flex-wrap justify-center mt-3 gap-2">
+                        <input name="sms-confirm" class="w-full h-[50px] text-lg text-center !px-1 !p-0 relative border border-solid focus:border-yellow-500 focus:outline-yellow-500" type="number" />
+                    </div>
+                    <button class="block w-full text-center bg-yellow-500 text-white mt-4 py-2 px-6">
+                        Confirm
+                    </button>
+                    {{-- <button class="block w-full text-center text-neutral-700 mt-2 text-underline">
+                        Send new code
+                    </button> --}}
+                </div>
+
+            </div>
+
+            <div id="approve-by-call" class="flex flex-col h-full justify-center">
+                <h2 class="text-center text-xl font-bold">
+                    Confirm by Call
+                </h2>
+                <div class="text-center mt-3">
+                    <p>Enter the 6-digit code we just sent to your phone number ending with </p>
+                    <div class="flex flex-wrap justify-center mt-3 gap-2">
+                        <input name="sms-confirm" class="w-full h-[50px] text-lg text-center !px-1 !p-0 relative border border-solid focus:border-yellow-500 focus:outline-yellow-500" type="number" />
+                    </div>
+                    <button class="block w-full text-center bg-yellow-500 text-white mt-4 py-2 px-6">
+                        Confirm
+                    </button>
+                    {{-- <button class="block w-full text-center text-neutral-700 mt-2 text-underline">
+                        Send new code
+                    </button> --}}
+                </div>
             </div>
         </div>
 
@@ -282,8 +335,7 @@
 
         <script>
             checkout.addEventListener('submit', e => {
-                e.preventDefault()
-                console.log('submited');
+                e.preventDefault();
 
                 // togglePopup(true) -> to activate or desactivate the popup
 
@@ -291,9 +343,18 @@
                 togglePopupWith('checkout-confirm') // see line 273
             })
 
-            // test
-            document.getElementById('test').addEventListener('click', () => {
-                confirm('Are you sure')
+            const approveBySmsBtn = document.getElementById('approve-by-sms-btn')
+            // const approveBySms = document.getElementById('approve-by-sms-btn')
+            const approveByCallBtn = document.getElementById('approve-by-call-btn')
+
+            approveBySmsBtn.addEventListener('click', e => {
+                // togglePopup(false)
+                togglePopupWith('approve-by-sms')
+            })
+
+            approveByCallBtn.addEventListener('click', e => {
+                // togglePopup(false)
+                togglePopupWith('approve-by-call')
             })
         </script>
 
