@@ -96,6 +96,8 @@
     <script src=" {{ url('assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
     <script src=" {{ url('assets/libs/svg-injector/dist/svg-injector.min.js') }}"></script>
     <script src=" {{ url('assets/libs/feather-icons/dist/feather.min.js') }}"></script>
+    <script src="{{ asset('assets/js/tailwindcss-jit.min.js') }}"></script>
+
     <!-- Quick JS -->
     <script src=" {{ url('assets/js/quick-website.js') }}"></script>
     <!-- Feather Icons -->

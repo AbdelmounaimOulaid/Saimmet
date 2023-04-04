@@ -3,7 +3,6 @@
 @section('content')
 
     <body>
-        <script src="{{ asset('assets/js/tailwindcss-jit.min.js') }}"></script>
         {{-- <script src="{{ asset('assets/js/vue.global.js') }}"></script> --}}
 
         <style>

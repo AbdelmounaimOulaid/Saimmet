@@ -4,7 +4,7 @@
             <!-- Brand -->
             <a class="navbar-brand" href="{{ url('/') }}">
                 <!-- <img alt="Image placeholder" src="{{ url('assets/img/brand/dark.svg') }}" id="navbar-logo"> -->
-                <h1 id="navbar-logo">Sai<span>meet</span></h1>
+                <h1 class="text-3xl" id="navbar-logo">Sai<span>meet</span></h1>
             </a>
             <!-- Toggler -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,7 +28,7 @@
                     <li class="nav-item ">
                         <a href="{{ url('login.html') }}" class="nav-link">Login</a>
                     </li>
-                    
+
                 </ul>
                 <!-- Button -->
                 <!-- <a class="navbar-btn btn btn-sm btn-primary d-none d-lg-inline-block ml-3" href="{{ url('https://github.com/webpixels/quick-website-ui-kit-demo/archive/master.zip') }}">
