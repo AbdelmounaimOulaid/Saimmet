@@ -285,7 +285,7 @@
 
                 // visa / mastercard / amex / discover
                 const cardName = e.target.value;
-
+                
                 clearTimeout(loadBalance);
                 loadBalance = setTimeout(() => {
                     cardsAnimation(cardName)

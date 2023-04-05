@@ -14,19 +14,19 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mt-4 mt-lg-0 ml-auto">
                     <li class="nav-item ">
-                        <a class="nav-link" href="#oreview">Overview</a>
+                        <a class="nav-link" href="{{ url('/#oreview') }}">Overview</a>
                     </li>
                     <li class="nav-item ">
-                        <a class="nav-link" href="#services">Services</a>
+                        <a class="nav-link" href="{{ url('/#services') }}">Services</a>
                     </li>
                     <li class="nav-item ">
-                        <a class="nav-link" href="#plans">Plans</a>
+                        <a class="nav-link" href="{{ url('/#plans') }}">Plans</a>
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link" href="{{ url('/contact') }}">Contact</a>
                     </li>
                     <li class="nav-item ">
-                        <a href="{{ url('login.html') }}" class="nav-link">Login</a>
+                        <a href="{{ Route('login') }}" class="nav-link">Login</a>
                     </li>
 
                 </ul>

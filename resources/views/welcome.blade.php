@@ -21,12 +21,12 @@
 
 <!-- Main content -->
 <section id="oreview" class="slice py-7">
-    <div class="container">
+    <div class="container-sm">
         <div class="row row-grid align-items-center">
             <div class="col-12 col-md-5 col-lg-6 order-md-2 text-center">
                 <!-- Image -->
                 <figure class="w-100">
-                    <img alt="Image placeholder" src="assets/img/svg/illustrations/illustration-3.svg" class="img-fluid mw-md-120">
+                    <img alt="Image placeholder" src="assets/img/svg/illustrations/illustration-3.svg" class="img-fluid mw-md-100">
                 </figure>
             </div>
             <div class="col-12 col-md-7 col-lg-6 order-md-1 pr-md-5">
@@ -40,9 +40,9 @@
                 </p>
                 <!-- Buttons -->
                 <div class="text-center text-md-left mt-5">
-                    <a href="https://webpixels.io/themes/quick-free-bootstrap-theme" class="btn btn-primary btn-icon" target="_blank">
-                        <span class="btn-inner--text">Register now</span>
-                        <span class="btn-inner--icon"><i data-feather="chevron-right"></i></span>
+                    <a href="{{ Route('register') }}" class="btn btn-primary btn-icon">
+                        <span class="btn-inner--text">Register now </span>
+                        
                     </a>
                 </div>
             </div>
@@ -58,7 +58,7 @@
                 <span class="badge badge-soft-success badge-pill badge-lg">
                     Get started
                 </span>
-                <h2 class="mt-4">Services</h2>
+                <h2 class="h1 strong-600">Services</h2>
                 <div class="mt-2">
                     <p class="lead lh-180">We serve All people with high quality growth services which are presented below</p>
                 </div>
@@ -119,7 +119,7 @@
         </div>
         <!-- Pricing -->
         <div class="row justify-content-center">
-            <div class="col-lg-4 col-md">
+            <div class="col-lg-3 col-md">
                 <div class="card card-pricing text-center px-3 hover-scale-110">
                     <div class="card-header py-5 border-0 delimiter-bottom">
                         <div class="h1 text-center mb-0">$<span class="price font-weight-bolder">25</span></div>
@@ -138,7 +138,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md">
+            <div class="col-lg-3 col-md">
                 <div class="card card-pricing bg-yellow text-center px-3 border-0 hover-scale-110">
                     <div class="card-header py-5 border-0 delimiter-bottom">
                         <div class="h1 text-white text-center mb-0">$<span class="price font-weight-bolder">42</span></div>
@@ -157,7 +157,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md">
+            <div class="col-lg-3 col-md">
                 <div class="card card-pricing text-center px-3 hover-scale-110">
                     <div class="card-header py-5 border-0 delimiter-bottom">
                         <div class="h1 text-center mb-0">$<span class="price font-weight-bolder">99</span></div>

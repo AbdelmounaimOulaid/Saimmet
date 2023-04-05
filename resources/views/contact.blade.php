@@ -6,7 +6,7 @@
    
     <!-- Main content -->
     <section class="slice py-6 pt-lg-7 pb-lg-8 bg-dark">
-        <!-- Container -->
+        <!-- Container-lg -->
         <div class="container">
             <div class="row row-grid align-items-center">
                 <div class="col-lg-6">
@@ -58,7 +58,7 @@
         </div>
     </section>
     <section class="slice slice-lg">
-        <div class="container">
+        <div class="container-lg">
             <div class="row" style="display: flex; justify-content:center;">
              
                 <div class="col-lg-4">
@@ -84,7 +84,7 @@
     </section>
   
     <section class="slice slice-lg">
-        <div class="container text-center text-lg-left">
+        <div class="container-lg text-center text-lg-left">
             <!-- Title -->
             <div class="row">
                 <div class="col-lg-6 col-md-10">
@@ -150,7 +150,7 @@
         </div>
     </section>
     <section class="slice slice-lg" id="sct-form-contact">
-        <div class="container position-relative zindex-100">
+        <div class="container-lg position-relative zindex-100">
             <div class="row justify-content-center mb-5">
                 <div class="col-lg-6 text-center">
                     <h3>Contact us</h3>
