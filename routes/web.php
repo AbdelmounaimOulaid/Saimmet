@@ -32,3 +32,7 @@ Route::get('/register' , function(){
 Route::get('/login' , function(){
     return view('forms.login');
 })->name('login');
+
+Route::get('/plans' , function(){
+    return view('plans');
+})->name('plans');

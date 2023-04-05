@@ -134,7 +134,7 @@
                             <li class="py-2" style="text-decoration: line-through;">Cloud Storage 5GB</li>
                             <li class="py-2" style="text-decoration: line-through;">Extras SSO, managed domains & more</li>
                         </ul>
-                        <a href="#" class="btn btn-sm btn-warning hover-translate-y-n3 hover-shadow-lg mb-3">Purchase now</a>
+                        <a href="{{ Route('register') }}" class="btn btn-sm btn-warning hover-translate-y-n3 hover-shadow-lg mb-3">Purchase now</a>
                     </div>
                 </div>
             </div>
@@ -153,7 +153,7 @@
                             <li class="py-2">Cloud Storage 5GB</li>
                             <li class="py-2" style="text-decoration: line-through;">Extras SSO, managed domains & more</li>
                         </ul>
-                        <a href="#" class="btn btn-sm btn-white hover-translate-y-n3 hover-shadow-lg mb-3">Purchase now</a>
+                        <a href="{{ Route('register') }}" class="btn btn-sm btn-white hover-translate-y-n3 hover-shadow-lg mb-3">Purchase now</a>
                     </div>
                 </div>
             </div>
@@ -172,7 +172,7 @@
                             <li class="py-2">Cloud Storage 5GB</li>
                             <li class="py-2">Extras SSO, managed domains & more</li>
                         </ul>
-                        <a href="#" class="btn btn-sm btn-warning hover-translate-y-n3 hover-shadow-lg mb-3">Purchase now</a>
+                        <a href="{{ Route('register') }}" class="btn btn-sm btn-warning hover-translate-y-n3 hover-shadow-lg mb-3">Purchase now</a>
                     </div>
                 </div>
             </div>
