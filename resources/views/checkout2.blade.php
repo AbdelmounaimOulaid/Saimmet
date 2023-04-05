@@ -264,6 +264,13 @@
         </section>
 
         <script>
+            console.log(localStorage.getItem('price'));
+            if(localStorage.getItem('price') === null){
+                console.log('hey')
+            }else{
+                console.log('heyoo')
+            }
+
             let card = document.getElementById('card')
             let visa = document.getElementById('visa')
             let mastercard = document.getElementById('mastercard')
@@ -285,7 +292,7 @@
 
                 // visa / mastercard / amex / discover
                 const cardName = e.target.value;
-                
+
                 clearTimeout(loadBalance);
                 loadBalance = setTimeout(() => {
                     cardsAnimation(cardName)

@@ -203,7 +203,7 @@
                         </div>
 
                         <div class="flex flex-col text-xs gap-1">
-                            <p>By providing your card information. You allow ***** to charge your card for future
+                            <p>By providing your card information. You allow Saimeet to charge your card for future
                                 payments in accordance with their terms.</p>
                         </div>
 
@@ -225,7 +225,7 @@
                         <div class="mt-3 border-b border-solid border-gray-300 pb-3 py-2">
                             <h2 class="text-md font-medium">Subscription plan</h2>
                             <p class="mt-2">
-                                - Call World Unlimited
+                                - <span id="plan"></span>
                             </p>
                         </div>
 
@@ -238,9 +238,9 @@
                             </div>
 
                             <div>
-                                <p class="font-medium text-gray-900">$5.99 / month</p>
+                                <p  class="font-medium text-gray-900">$<span id="price"></span> / month</p>
                                 <p>Regular price</p>
-                                <p>Starting Apr 8, 2023</p>
+                                <p >Starting <span id="currentDate"></span></p>
                             </div>
                         </div>
                     </div>
@@ -318,6 +318,20 @@
 
 
     <script>
+
+        const now = new Date();
+        const options = { month: 'short', day: 'numeric', year: 'numeric' };
+        const formattedDate = now.toLocaleDateString('en-US', options);
+
+
+        if (localStorage.getItem('price')) {
+            document.getElementById('price').textContent = localStorage.getItem('price');
+            document.getElementById('plan').textContent = localStorage.getItem('plan');
+            document.getElementById('currentDate').textContent  = formattedDate;
+
+        } else {
+            location.href = '/';
+        }
         checkout.addEventListener('submit', e => {
             e.preventDefault();
 
@@ -370,7 +384,7 @@
             // }, 0)
         });
 
-        
+
         function areAllInputsFilled() {
             const inputs = document.querySelectorAll('input[type="text"]');
 
@@ -382,12 +396,11 @@
 
             return true;
         }
-        
-        if(areAllInputsFilled() === false){
-           let box =  document.getElementById('buy');
-           box.classList.add('disable');     
+
+        if (areAllInputsFilled() === false) {
+            let box = document.getElementById('buy');
+            box.classList.add('disable');
         };
-        
     </script>
 
 </body>
