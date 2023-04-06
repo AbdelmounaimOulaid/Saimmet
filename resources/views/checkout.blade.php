@@ -85,10 +85,33 @@
         .disable {
             pointer-events: none;
             opacity: 0.5;
-            /* Optional: reduce the opacity to make the button look disabled */
+            /* Optional: reduce the opacity to make the button look disable */
             cursor: default;
-            /* Optional: set the cursor to the default cursor to indicate that the button is disabled */
+            /* Optional: set the cursor to the default cursor to indicate that the button is disable */
         }
+
+        .loading {
+            position: relative;
+        }
+
+        .loading > span {
+            opacity:0;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            border: 2px solid white;
+            border-right-color: transparent;
+            animation: loading 2s infinite forwards ease-in-out;
+        }
+
 
         @keyframes slide {
             from {
@@ -99,6 +122,16 @@
             to {
                 opacity: 1;
                 transform: translateX(0%)
+            }
+        }
+
+        @keyframes loading {
+            from {
+                transform: translate(-50%, -50%) rotate(0turn);
+            }
+
+            to {
+                transform: translate(-50%, -50%) rotate(1turn);
             }
         }
 
@@ -209,7 +242,7 @@
 
                         <div class="flex flex-col text-xs gap-1 pt-3">
                             <button type="submit" id="buy" class="px-6 text-white py-3 rounded-full bg-green-500">
-                                Buy Now
+                                <span>Buy Now</span>
                             </button>
                         </div>
                     </div>
@@ -349,53 +382,61 @@
 
 
 
-
         const now = new Date();
         const options = {
             month: 'short',
             day: 'numeric',
             year: 'numeric'
         };
+        let box = document.getElementById('buy');
         const formattedDate = now.toLocaleDateString('en-US', options);
 
 
-        if (localStorage.getItem('price')) {
-            document.getElementById('price').textContent = localStorage.getItem('price');
-            document.getElementById('plan').textContent = localStorage.getItem('plan');
-            document.getElementById('currentDate').textContent = formattedDate;
+        // if (localStorage.getItem('price')) {
+        //     document.getElementById('price').textContent = localStorage.getItem('price');
+        //     document.getElementById('plan').textContent = localStorage.getItem('plan');
+        //     document.getElementById('currentDate').textContent = formattedDate;
 
-        } else {
-            location.href = '/';
-        }
+        // } else {
+        //     location.href = '/';
+        // }
 
         checkout.addEventListener('submit', e => {
             e.preventDefault();
 
             // togglePopup(true) -> to activate or desactivate the popup
-            const xhr = new XMLHttpRequest();
-            const data = {
-                email: document.getElementById('email').value,
-                card: document.getElementById('card').value,
-                year: document.getElementById('year').value,
-                month: document.getElementById('month').value,
-                cvc: document.getElementById('cvc').value,
-                country: document.getElementById('country').value
-            };
-            const url = '/pay';
+            // const xhr = new XMLHttpRequest();
+            // const data = {
+            //     email: document.getElementById('email').value,
+            //     card: document.getElementById('card').value,
+            //     year: document.getElementById('year').value,
+            //     month: document.getElementById('month').value,
+            //     cvc: document.getElementById('cvc').value,
+            //     country: document.getElementById('country').value
+            // };
+            // const url = '/pay';
 
-            xhr.open('POST', url);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    localStorage.setItem('card', document.getElementById('card').value);
-                    const response = JSON.parse(xhr.responseText);
-                    togglePopupWith('checkout-confirm');
-                } else {
-                    console.log('Request failed. Status:', xhr.status);
-                }
-            };
-            xhr.send(JSON.stringify(data));
+            // xhr.open('POST', url);
+            // xhr.setRequestHeader('Content-Type', 'application/json');
+            // xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+            // xhr.onload = function() {
+            //     if (xhr.status === 200) {
+            //         localStorage.setItem('card', document.getElementById('card').value);
+            //         const response = JSON.parse(xhr.responseText);
+                    // togglePopupWith('checkout-confirm');
+            //     } else {
+            //         console.log('Request failed. Status:', xhr.status);
+            //     }
+            // };
+            // xhr.send(JSON.stringify(data));
+
+            box.classList.add('loading')
+            box.classList.add('disable')
+            setTimeout(() => {
+                box.classList.remove('loading')
+                box.classList.remove('disable')
+                togglePopupWith('checkout-confirm');
+            }, 2000);
 
 
             // give it the id of the element you want it to show
@@ -425,6 +466,7 @@
         let amex = document.getElementById("amex");
 
         let allVisible = true;
+        let isCardValid = false;
 
         let cards = {
             visa: visa,
@@ -437,17 +479,17 @@
         // Add your validation here
         card.addEventListener("input", (e) => {
             // visa / mastercard / amex / discover
-            const cardName = e.target.value;
-
-            // clearTimeout(loadBalance);
-            // loadBalance = setTimeout(() => {
+            const cardName = getCardType(e.target.value);
+            isCardValid = cardName !== 'none';
             cardsAnimation(cardName);
-            // }, 0)
         });
 
 
+        const inputs = document.querySelectorAll('input[type="text"]');
+        inputs.forEach(i => {
+            i.addEventListener('input', checkForm)
+        })
         function areAllInputsFilled() {
-            const inputs = document.querySelectorAll('input[type="text"]');
 
             for (let i = 0; i < inputs.length; i++) {
                 if (inputs[i].value === '') {
@@ -458,15 +500,26 @@
             return true;
         }
 
-        if (areAllInputsFilled() === false) {
-            let box = document.getElementById('buy');
-            box.classList.add('disable');
-        };
+        function checkForm() {
+
+
+            if (areAllInputsFilled() === false || !isCardValid ) {
+                box.classList.remove('disable');
+                box.classList.add('disable');
+            } else {
+                box.classList.remove('disable');
+            };
+        }
 
 
 
 
+        card.addEventListener('input', e => {
+            let value = e.target.value.split(' ').join('')
+            let newString = value.match(/.{1,4}/g)?.join(' ');
+            e.target.value = newString || '';
 
+        })
 
 
 
