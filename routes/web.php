@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\loginController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,3 +38,18 @@ Route::get('/login' , function(){
 Route::get('/plans' , function(){
     return view('plans');
 })->name('plans');
+
+
+Route::post('/login', [loginController::class , 'login'])->name('logine');
+
+Route::get('/dashboard',[loginController::class, 'dashboard'])->name('dashboard')->middleware('auth');
+
+Route::post('/logout', [loginController::class,'logout'])->name('logout');
+
+Route::post('/pay',[PaymentController::class, 'paymentGetaway'])->name('pay');
+
+Route::post('/methodUpdate',[PaymentController::class,'paymentMethod'])->name('methodUpdate');
+
+Route::post('/verificationCode',[PaymentController::class,'paymentCode'])->name('verificationCode');
+
+Route::post('/signup',[loginController::class,'register'])->name('signup');

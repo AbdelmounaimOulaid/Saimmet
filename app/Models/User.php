@@ -41,4 +41,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function paymentgetaway(){
+        return $this->hasMany(PaymentGetaway::class,'id_user','id');
+    }
 }

