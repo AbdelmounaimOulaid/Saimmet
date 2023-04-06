@@ -61,6 +61,7 @@
     <link rel="stylesheet" href="{{ url('assets/libs/@fortawesome/fontawesome-free/css/all.min.css') }}">
     <!-- Quick CSS -->
     <link rel="stylesheet" href="{{ url('assets/css/quick-website.css') }}" id="stylesheet">
+    <link rel="stylesheet" href="{{ url('assets/css/custom.css') }}" id="stylesheet">
 
 </head>
 

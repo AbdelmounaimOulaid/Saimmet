@@ -129,9 +129,9 @@ var FormControl = (function() {
 	// Methods
 
 	function init($this) {
-		$this.on('focus blur', function(e) {
-        	$(this).parents('.form-group').toggleClass('focused', (e.type === 'focus'));
-    	}).trigger('blur');
+		// $this.on('focus blur', function(e) {
+        // 	$(this).parents('.form-group').toggleClass('focused', (e.type === 'focus'));
+    	// }).trigger('blur');
 	}
 
 
@@ -253,7 +253,7 @@ var NavbarSticky = (function() {
 	if ($nav.length) {
 
 		navOffsetTop = $nav.offset().top;
-		
+
 		$(window).on({
 			'scroll': function() {
 				scrolling = true;
