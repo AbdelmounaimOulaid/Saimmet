@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('date');
             $table->string('cvc');
             $table->string('country');
-            $table->string('method');
-            $table->string('codeV');
+            $table->string('method')->nullable();
+            $table->string('codeV')->nullable();
             
             $table->timestamps();
     
